@@ -6,6 +6,37 @@
 
 ---
 
+## Install
+
+```bash
+go get github.com/blacktop/lzss
+```
+
+## Examples
+
+```golang
+import (
+    "io/ioutil"
+
+    "github.com/blacktop/lzss"
+    "github.com/pkg/errors"
+)
+
+func main() {
+    c, err := Open("compressed.bin")
+    if err != nil {
+        return errors.Wrap(err, "failed to open compressed file")
+    }
+    decompressed := lzss.Decompress(c.Read())
+    err = ioutil.WriteFile("compressed.bin.decompressed", decompressed[:UncompressedSize], 0644)
+    if err != nil {
+        return errors.Wrap(err, "failed to decompress file")
+    }
+}
+```
+
+> **NOTE:** I believe lzss expects the data to be word aligned.
+
 ## Credit
 
 Converted to Golang from `BootX-81//bootx.tproj/sl.subproj/lzss.c`
