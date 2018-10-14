@@ -41,6 +41,10 @@ func main() {
 
 Converted to Golang from `BootX-81//bootx.tproj/sl.subproj/lzss.c`
 
+## TODO
+
+- [ ] add Compress func
+
 ## License
 
 MIT Copyright (c) 2018 blacktop
