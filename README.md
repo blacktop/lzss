@@ -17,20 +17,22 @@ go get github.com/blacktop/lzss
 ```golang
 import (
     "io/ioutil"
+    "log"
 
     "github.com/blacktop/lzss"
     "github.com/pkg/errors"
 )
 
 func main() {
-    c, err := Open("compressed.bin")
+    dat, err := ioutil.ReadFile("compressed.bin")
     if err != nil {
-        return errors.Wrap(err, "failed to open compressed file")
+        log.Fatal(errors.Wrap(err, "failed to read compressed file"))
     }
-    decompressed := lzss.Decompress(c.Read())
-    err = ioutil.WriteFile("compressed.bin.decompressed", decompressed[:UncompressedSize], 0644)
+
+    decompressed := lzss.Decompress(dat)
+    err = ioutil.WriteFile("compressed.bin.decompressed", decompressed, 0644)
     if err != nil {
-        return errors.Wrap(err, "failed to decompress file")
+        log.Fatal(errors.Wrap(err, "failed to decompress file"))
     }
 }
 ```
