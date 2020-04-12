@@ -1,6 +1,6 @@
 # lzss
 
-[![GoDoc](https://godoc.org/github.com/blacktop/lzss?status.svg)](pkg.go.dev) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+[![GoDoc](https://godoc.org/github.com/blacktop/lzss?status.svg)](https://pkg.go.dev/github.com/blacktop/lzss) [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 > LZSS compression package for Go.
 
