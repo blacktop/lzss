@@ -23,13 +23,24 @@ package lzss
 import "bytes"
 
 const (
-	// N is the size of ring buffer - must be power of 2
-	N = 4096
-	// F is the upper limit for match_length
-	F = 18
-	// THRESHOLD encode string into position and length if match_length is greater than this
-	THRESHOLD = 2
+	// n is the size of ring buffer - must be power of 2
+	n = 4096
+	// f is the upper limit for match_length
+	f = 18
+	// threshold encode string into position and length if match_length is greater than this
+	threshold = 2
+	padding   = 0x16c
 )
+
+// Header represents the LZSS header
+type Header struct {
+	CompressionType  uint32 // 0x636f6d70 "comp"
+	Signature        uint32 // 0x6c7a7373 "lzss"
+	CheckSum         uint32 // Likely CRC32
+	UncompressedSize uint32
+	CompressedSize   uint32
+	Padding          [padding]byte
+}
 
 // Decompress decompresses lzss data
 func Decompress(src []byte) []byte {
@@ -40,10 +51,10 @@ func Decompress(src []byte) []byte {
 	srcBuf := bytes.NewBuffer(src)
 	dst := bytes.Buffer{}
 
-	// ring buffer of size N, with extra F-1 bytes to aid string comparison
-	textBuf := make([]byte, N+F-1)
+	// ring buffer of size n, with extra f-1 bytes to aid string comparison
+	textBuf := make([]byte, n+f-1)
 
-	r = N - F
+	r = n - f
 	flags = 0
 
 	for {
@@ -65,7 +76,7 @@ func Decompress(src []byte) []byte {
 			dst.WriteByte(byte(c))
 			textBuf[r] = byte(c)
 			r++
-			r &= (N - 1)
+			r &= (n - 1)
 		} else {
 			bite, err := srcBuf.ReadByte()
 			if err != nil {
@@ -80,13 +91,13 @@ func Decompress(src []byte) []byte {
 			j = int(bite)
 
 			i |= ((j & 0xF0) << 4)
-			j = (j & 0x0F) + THRESHOLD
+			j = (j & 0x0F) + threshold
 			for k := 0; k <= j; k++ {
-				c = int(textBuf[(i+k)&(N-1)])
+				c = int(textBuf[(i+k)&(n-1)])
 				dst.WriteByte(byte(c))
 				textBuf[r] = byte(c)
 				r++
-				r &= (N - 1)
+				r &= (n - 1)
 			}
 		}
 	}
