@@ -94,11 +94,7 @@ func main() {
 
 ## Credit
 
-Converted to Golang from `BootX-81//bootx.tproj/sl.subproj/lzss.c`
-
-## TODO
-
-- [x] add Compress func
+Converted to Golang from `https://github.com/opensource-apple/kext_tools/blob/master/compression.c`
 
 ## License
 

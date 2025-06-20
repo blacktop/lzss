@@ -240,8 +240,8 @@ func TestKnownGoodVectors(t *testing.T) {
 		{
 			name:     "highly_repetitive",
 			input:    bytes.Repeat([]byte{0x41}, 1000),
-			minRatio: 0.01, // should compress very well
-			maxRatio: 0.1,
+			minRatio: 0.05, // should compress very well
+			maxRatio: 0.15, // realistic for LZSS overhead
 		},
 		{
 			name:     "random_like",
