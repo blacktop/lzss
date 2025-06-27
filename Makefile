@@ -7,7 +7,7 @@ bump:
 .PHONY: build
 build:
 	@echo "🚀 Building Version $(shell svu current)"
-	go build -o TEMPLATE main.go
+	go build -o lzss.$(shell svu current) cmd/main.go
 
 .PHONY: release
 release: build bump
