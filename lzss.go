@@ -30,8 +30,12 @@ const (
 	// threshold encode string into position and length if match_length is greater than this
 	threshold = 2
 	// nil index for root of binary search trees
-	nil = n
+	nil     = n
 	padding = 0x16c
+	// Magic and CompressionType for LZSS Apple format
+	Magic           = "complzss"
+	CompressionType = 0x636f6d70 // "comp"
+	Signature       = 0x6c7a7373 // "lzss"
 )
 
 // Header represents the LZSS header
@@ -46,12 +50,12 @@ type Header struct {
 
 // encodeState represents the compression state with binary search trees
 type encodeState struct {
-	lchild [n + 1]int
-	rchild [n + 257]int
-	parent [n + 1]int
-	textBuf [n + f - 1]byte
+	lchild        [n + 1]int
+	rchild        [n + 257]int
+	parent        [n + 1]int
+	textBuf       [n + f - 1]byte
 	matchPosition int
-	matchLength int
+	matchLength   int
 }
 
 // initState initializes the encoding state, mostly the trees
@@ -222,8 +226,8 @@ func Compress(src []byte) []byte {
 			sp.matchLength = dataLen
 		}
 		if sp.matchLength <= threshold {
-			sp.matchLength = 1 // Not long enough match. Send one byte.
-			codeBuf[0] |= mask  // 'send one byte' flag
+			sp.matchLength = 1                  // Not long enough match. Send one byte.
+			codeBuf[0] |= mask                  // 'send one byte' flag
 			codeBuf[codeBufPtr] = sp.textBuf[r] // Send uncoded
 			codeBufPtr++
 		} else {
@@ -298,7 +302,7 @@ func Decompress(src []byte) []byte {
 
 	// ring buffer of size n, with extra f-1 bytes to aid string comparison
 	textBuf := make([]byte, n+f-1)
-	
+
 	// Initialize ring buffer with spaces (only first N-F positions like C)
 	for i = 0; i < n-f; i++ {
 		textBuf[i] = ' '
