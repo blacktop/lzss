@@ -31,7 +31,7 @@ const (
 	threshold = 2
 	// nil index for root of binary search trees
 	nil     = n
-	padding = 0x16c
+	padding = 360
 	// Magic and CompressionType for LZSS Apple format
 	Magic           = "complzss"
 	CompressionType = 0x636f6d70 // "comp"
@@ -45,6 +45,7 @@ type Header struct {
 	CheckSum         uint32 // Likely CRC32
 	UncompressedSize uint32
 	CompressedSize   uint32
+	Version          uint32 // Version of the compression algorithm
 	Padding          [padding]byte
 }
 
