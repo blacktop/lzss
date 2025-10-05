@@ -17,7 +17,7 @@ go get github.com/blacktop/lzss
 ### As a CLI tool
 
 ```bash
-go install github.com/blacktop/lzss/cmd@latest
+go install github.com/blacktop/lzss/cmd@v0.1.6
 ```
 
 ## CLI Usage
